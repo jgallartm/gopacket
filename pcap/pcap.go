@@ -9,7 +9,7 @@ package pcap
 
 /*
 #cgo solaris LDFLAGS: -L /opt/local/lib -lpcap
-#cgo linux LDFLAGS: -lpcap
+#cgo linux LDFLAGS: -lpcap -ldl
 #cgo dragonfly LDFLAGS: -lpcap
 #cgo freebsd LDFLAGS: -lpcap
 #cgo openbsd LDFLAGS: -lpcap
