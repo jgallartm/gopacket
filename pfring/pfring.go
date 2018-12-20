@@ -41,7 +41,7 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/google/gopacket"
+	"github.com/jgallartm/gopacket"
 )
 
 const errorBufferSize = 256
@@ -87,15 +87,13 @@ func NewRing(device string, snaplen uint32, flags Flag) (ring *Ring, _ error) {
 		return nil, fmt.Errorf("pfring NewRing error: %v", err)
 	}
 	ring = &Ring{cptr: cptr, snaplen: int(snaplen)}
+	ring.useExtendedPacketHeader = false
 
-	if flags&FlagLongHeader == FlagLongHeader {
-		ring.useExtendedPacketHeader = true
-	} else {
-		ifc, err := net.InterfaceByName(device)
-		if err == nil {
+	ifc, err := net.InterfaceByName(device)
+	if err == nil {
 			ring.interfaceIndex = ifc.Index
-		}
 	}
+
 	ring.SetApplicationName(os.Args[0])
 	return
 }
@@ -151,11 +149,11 @@ func (r *Ring) ReadPacketDataTo(data []byte) (ci gopacket.CaptureInfo, err error
 		int64(r.pkthdr.ts.tv_usec)*1000) // convert micros to nanos
 	ci.CaptureLength = int(r.pkthdr.caplen)
 	ci.Length = int(r.pkthdr.len)
-	if r.useExtendedPacketHeader {
-		ci.InterfaceIndex = int(r.pkthdr.extended_hdr.if_index)
-	} else {
-		ci.InterfaceIndex = r.interfaceIndex
-	}
+	//if r.useExtendedPacketHeader {
+	//	ci.InterfaceIndex = int(r.pkthdr.extended_hdr.if_index)
+	//} else {
+	ci.InterfaceIndex = r.interfaceIndex
+	//}
 	r.mu.Unlock()
 	return
 }
