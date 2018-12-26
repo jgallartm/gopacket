@@ -14,8 +14,8 @@ import (
 	"io"
 	"time"
 
-	"github.com/google/gopacket"
-	"github.com/google/gopacket/layers"
+	"github.com/jgallartm/gopacket"
+	"github.com/jgallartm/gopacket/layers"
 )
 
 // NgReaderOptions holds options for reading a pcapng file
